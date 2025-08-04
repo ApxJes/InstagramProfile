@@ -69,7 +69,6 @@ fun ProfileImageAndStatSection(
         )
 
         Spacer(modifier = Modifier.width(12.dp))
-
         ProfileStat(
             numberText = "100",
             text = "Posts"
@@ -127,7 +126,8 @@ fun ProfileStat(
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = text,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontSize = 12.sp
         )
     }
 }
@@ -158,7 +158,8 @@ fun ProfileDescription(
         Text(
             text = description,
             letterSpacing = letterSpacing,
-            lineHeight = lineHeight
+            lineHeight = lineHeight,
+            fontSize = 12.sp
         )
 
         Text(
@@ -166,6 +167,7 @@ fun ProfileDescription(
             fontWeight = FontWeight.Bold,
             letterSpacing = letterSpacing,
             lineHeight = lineHeight,
+            fontSize = 12.sp,
             color = Color(0xFF3D3D91)
         )
 
@@ -173,7 +175,8 @@ fun ProfileDescription(
             text = buildAnnotatedString {
                 val boldStyle = SpanStyle(
                     color = Color.Black,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp
                 )
                 append("Followed by ")
 
@@ -186,15 +189,17 @@ fun ProfileDescription(
                         append(", ")
                     }
                 }
+                Spacer(modifier = Modifier.height(4.dp))
 
                 if(otherCount > 2) {
                     append(" and ")
                     pushStyle(boldStyle)
-                    append("$otherCount others...")
+                    append("$otherCount others")
                 }
             },
             letterSpacing = letterSpacing,
-            lineHeight = lineHeight
+            lineHeight = lineHeight,
+            fontSize = 12.sp
         )
     }
 }

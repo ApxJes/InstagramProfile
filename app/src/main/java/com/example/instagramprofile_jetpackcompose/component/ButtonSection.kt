@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -30,7 +31,8 @@ fun ButtonSection() {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         ActionButton(
             text = "Following",
@@ -38,6 +40,7 @@ fun ButtonSection() {
             modifier = Modifier
                 .defaultMinSize(minSize)
                 .height(height)
+                .padding(end = 6.dp)
         )
 
         ActionButton(
@@ -45,6 +48,7 @@ fun ButtonSection() {
             modifier = Modifier
                 .defaultMinSize(minSize)
                 .height(height)
+                .padding(end = 6.dp)
         )
 
         ActionButton(
@@ -52,6 +56,7 @@ fun ButtonSection() {
             modifier = Modifier
                 .defaultMinSize(minSize)
                 .height(height)
+                .padding(end = 6.dp)
         )
 
         ActionButton(
@@ -83,8 +88,8 @@ fun ActionButton(
         text?.let {  text ->
             Text(
                 text = text,
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center
             )
         }
 
