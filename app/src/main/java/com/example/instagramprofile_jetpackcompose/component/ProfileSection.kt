@@ -1,93 +1,120 @@
 package com.example.instagramprofile_jetpackcompose.component
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.instagramprofile_jetpackcompose.R
-
+import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileSection() {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-
-        ProfileImageAndStatSection()
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        ProfileDescription(
-            displayName = "4p.exe",
-            description = "almost 2 years of coding experience\n" +
-                    "Want me to make your app, send me your email!\n" +
-                    "Subscribe to my youtube channel",
-            url = "https://www.youtube.com/@Ap20yrso",
-            followedBy = listOf("chelseafc", "leomessi"),
-            otherCount = 15,
-        )
-    }
-}
-@Composable
-fun ProfileImageAndStatSection(
+fun ProfileSection(
     modifier: Modifier = Modifier
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly,
+    Column(
         modifier = modifier.fillMaxWidth()
     ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            RoundedImage(
+                image = painterResource(R.drawable.agpyae),
+                modifier = modifier
+                    .size(100.dp)
+                    .weight(3f)
+            )
 
-        ProfileRoundedImage(
-            image = painterResource(id = R.drawable.agpyae),
-            modifier = Modifier
-                .size(100.dp)
+            ProfileStat(typeText = "Posts", numberText = "101", modifier = modifier.padding(end = 12.dp))
+            ProfileStat(typeText = "Followers", numberText = "10.5k", modifier = modifier.padding(end = 12.dp))
+            ProfileStat(typeText = "Following", numberText = "75")
+        }
+
+        Spacer(modifier = modifier.height(10.dp))
+        DescriptionSection(
+            userName = "@4p.exe",
+            description = "Native Android Developer",
+            url = "https://www.youtube.com/@Ap20yrso",
+            followedBy = listOf("chelseaFc", "Leomessi", "IshowSpeed", "Google", "Lisa"),
+            count = 17,
         )
 
-        Spacer(modifier = Modifier.width(12.dp))
-        ProfileStat(
-            numberText = "100",
-            text = "Posts"
+        Spacer(modifier = modifier.height(15.dp))
+        ButtonSection(modifier = modifier.padding(4.dp))
+
+        Spacer(modifier = modifier.height(12.dp))
+        HighlightSection(
+            highlights = listOf(
+                Highlights(
+                    image = painterResource(R.drawable.youtube),
+                    text = "YouTube"
+                ),
+
+                Highlights(
+                    image = painterResource(R.drawable.telegram),
+                    text = "Telegram"
+                ),
+
+                Highlights(
+                    image = painterResource(R.drawable.discord),
+                    text = "Discord"
+                ),
+
+                Highlights(
+                    image = painterResource(R.drawable.qa),
+                    text = "Q&A"
+                )
+            )
         )
 
-        ProfileStat(
-            numberText = "12.5k",
-            text = "Followers"
-        )
-
-        ProfileStat(
-            numberText = "78",
-            text = "Following"
-        )
+        Spacer(modifier = modifier.height(10.dp))
+        TabSection()
     }
 }
 
 @Composable
-fun ProfileRoundedImage(
+fun RoundedImage(
     image: Painter,
     modifier: Modifier = Modifier
 ) {
@@ -103,103 +130,304 @@ fun ProfileRoundedImage(
             )
             .padding(3.dp)
             .clip(CircleShape),
+
         contentScale = ContentScale.Crop
     )
 }
 
 @Composable
 fun ProfileStat(
-    numberText: String,
-    text: String
+    modifier: Modifier = Modifier,
+    typeText: String,
+    numberText: String
 ) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(
+            modifier = modifier
+        ) {
+            Text(
+                text = numberText,
+                fontSize = 18.sp,
+                color = Color.Black,
+            )
+
+            Text(
+                text = typeText,
+                fontSize = 16.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Normal,
+            )
+        }
+    }
+}
+
+@Composable
+fun DescriptionSection(
+    userName: String,
+    description: String,
+    url: String,
+    followedBy: List<String>,
+    count: Int,
+    modifier: Modifier = Modifier
+){
     Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 4.dp)
     ) {
         Text(
-            text = numberText,
+            text = userName,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center
+            color = Color.Black
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = text,
-            textAlign = TextAlign.Center,
-            fontSize = 12.sp
+            text = description,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+            color = Color.DarkGray,
+            maxLines = 3,
+            minLines = 1,
+            lineHeight = 20.sp
+        )
+
+        Text(
+            text = url,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Blue
+        )
+
+        if(followedBy.isNotEmpty()) {
+            Text(
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+                color = Color.DarkGray,
+                text = buildAnnotatedString {
+                    val boldStyle = SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+
+                    append("Followed by ")
+                    followedBy.forEachIndexed { index, name ->
+                        pushStyle(boldStyle)
+                        append(name)
+                        pop()
+                        if(index != followedBy.lastIndex) {
+                            append(", ")
+                        }
+                    }
+
+                    if (count > 2) {
+                        append(" and ")
+                        pushStyle(boldStyle)
+                        append("$count others")
+                    }
+                },
+                letterSpacing = 1.sp,
+                lineHeight = 16.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun ButtonSection(
+    modifier: Modifier = Modifier
+) {
+
+    val width = 95.dp
+    val height = 30.dp
+
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        ActionButton(
+            text = "Following",
+            imageVector = Icons.Default.KeyboardArrowDown,
+            modifier = modifier
+                .defaultMinSize(width)
+                .height(height)
+        )
+
+        ActionButton(
+            text = "Message",
+            modifier = modifier
+                .defaultMinSize(width)
+                .height(height)
+        )
+
+        ActionButton(
+            text = "Email",
+            modifier = modifier
+                .defaultMinSize(width)
+                .height(height)
+        )
+
+        ActionButton(
+            text = "",
+            imageVector = Icons.Default.KeyboardArrowDown,
+            modifier = modifier
+                .defaultMinSize(width)
+                .height(height)
         )
     }
 }
 
 @Composable
-fun ProfileDescription(
-    displayName: String,
-    description: String,
-    url: String,
-    followedBy: List<String>,
-    otherCount: Int
+fun ActionButton(
+    modifier: Modifier = Modifier,
+    text: String? = null,
+    imageVector: ImageVector? = null
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .border(
+                width = 1.5.dp,
+                color = Color.LightGray,
+                shape = RoundedCornerShape(5.dp)
+            )
     ) {
-        val letterSpacing = 1.sp
-        val lineHeight = 20.sp
+        text?.let { text ->
+            Text(
+                text = text,
+                fontSize = 14.sp,
+                color = Color.DarkGray,
+                fontWeight = FontWeight.Normal
+            )
 
-        Text(
-            text = displayName,
-            fontWeight = FontWeight.Bold,
-            letterSpacing = letterSpacing,
-            lineHeight = lineHeight,
-            fontSize = 18.sp
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-
-        Text(
-            text = description,
-            letterSpacing = letterSpacing,
-            lineHeight = lineHeight,
-            fontSize = 12.sp
-        )
-
-        Text(
-            text = url,
-            fontWeight = FontWeight.Bold,
-            letterSpacing = letterSpacing,
-            lineHeight = lineHeight,
-            fontSize = 12.sp,
-            color = Color(0xFF3D3D91)
-        )
-
-        Text(
-            text = buildAnnotatedString {
-                val boldStyle = SpanStyle(
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp
+            imageVector?.let { imageVector ->
+                Icon(
+                    imageVector = imageVector,
+                    contentDescription = null,
+                    tint = Color.DarkGray
                 )
-                append("Followed by ")
+            }
+        }
+    }
+}
 
-                followedBy.forEachIndexed { index, name ->
-                    pushStyle(boldStyle)
-                    append(name)
-                    pop()
+@Composable
+fun HighlightSection(
+    modifier: Modifier = Modifier,
+    highlights: List<Highlights>
+) {
+    LazyRow(modifier = modifier) {
+        items(highlights.size) {
+            Column(
+                modifier = modifier.padding(horizontal = 12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                RoundedImage(
+                    image = highlights[it].image,
+                    modifier = modifier.size(70.dp)
+                )
 
-                    if(index < followedBy.size -1 ){
-                        append(", ")
+                Text(
+                    text = highlights[it].text,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.DarkGray
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun TabSection(
+    modifier: Modifier = Modifier
+) {
+    val tabItems = listOf(
+        TabItems("", ImageVector.vectorResource(id = R.drawable.ic_grid)),
+        TabItems("", ImageVector.vectorResource(id = R.drawable.ic_igtv)),
+        TabItems("", ImageVector.vectorResource(id = R.drawable.ic_reel))
+    )
+
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { tabItems.size })
+    val coroutineScope = rememberCoroutineScope()
+
+    Column {
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            modifier = modifier.fillMaxWidth()
+        ) {
+            tabItems.forEachIndexed { index, items ->
+                Tab(
+                    selected = pagerState.currentPage == index,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = items.icon,
+                            contentDescription = null,
+                            tint = if (pagerState.currentPage == index) Color.Black else Color.DarkGray,
+                            modifier = Modifier.size(20.dp)
+                        )
                     }
-                }
-                Spacer(modifier = Modifier.height(4.dp))
+                )
+            }
+        }
 
-                if(otherCount > 2) {
-                    append(" and ")
-                    pushStyle(boldStyle)
-                    append("$otherCount others")
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
+        ) { page ->
+            when (page) {
+                0 -> PostSection(
+                    posts = listOf(
+                        painterResource(R.drawable.kmm),
+                        painterResource(R.drawable.bad_habits),
+                        painterResource(R.drawable.multiple_languages),
+                        painterResource(R.drawable.master_logical_thinking),
+                        painterResource(R.drawable.intermediate_dev),
+                        painterResource(R.drawable.intermediate_dev),
+                    )
+                )
+                1 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("IGTV")
                 }
-            },
-            letterSpacing = letterSpacing,
-            lineHeight = lineHeight,
-            fontSize = 12.sp
-        )
+                2 -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Reels")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PostSection(
+    modifier: Modifier = Modifier,
+    posts: List<Painter>
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = modifier.scale(1.01f)
+    ) {
+        items(posts.size) {
+            Image(
+                painter = posts[it],
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = modifier
+                    .aspectRatio(1f)
+                    .border(
+                        width = 1.dp,
+                        color = Color.White
+                    )
+            )
+        }
     }
 }

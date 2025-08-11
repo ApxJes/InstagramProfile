@@ -16,7 +16,6 @@ import com.example.instagramprofile_jetpackcompose.ui.theme.InstagramProfile_Jet
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             InstagramProfile_JetpackComposeTheme {
                 ProfileScreen()
